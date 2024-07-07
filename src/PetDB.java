@@ -1,3 +1,11 @@
+/*
+ *      Title:      Pet Database Program (Assignment 1)
+ *      Author:     Norlander, Robert
+ *      Date:       2024-07-07
+ *      Class:      CSC 422-100 Software Engineering (Summer 2024)
+ *      Instructor: Prof. James Tucker
+ */
+
 import java.util.ArrayList;
 
 public class PetDB {
@@ -57,5 +65,29 @@ public class PetDB {
             }
         }
         return result;
+    }
+
+    public Pet getById(int id) {
+        for (Pet pet : _pets) {
+            if (pet.getId() == id) {
+                return pet;
+            }
+        }
+        return null;
+    }
+
+    public void removeById(int id) {
+        Pet pet = getById(id);
+        if (pet != null) {
+            _pets.remove(pet);
+        }
+    }
+
+    public void updateById(int id, String name, int age) {
+        Pet pet = getById(id);
+        if (pet != null) {
+            pet.setName(name);
+            pet.setAge(age);
+        }
     }
 }
