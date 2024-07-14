@@ -6,10 +6,25 @@
  *      Instructor: Prof. James Tucker
  */
 
+import java.io.File;
+
+import exceptions.InvalidFileFormatError;
+
 public class App {
+    static String dbDataFileName = "src/data.txt";
     public static void main(String[] args) throws Exception {
+        // Initialize the data file
+        boolean dbFileInitialized = initializeDbFile();
+        if (!dbFileInitialized) {
+            System.err.println("Error initializing data file. Exiting program.");
+            System.exit(1);
+        }
+
         // Initialize the PetDB object
         PetDB db = new PetDB();
+
+        // Load data from file
+        loadFile(db);
         
         System.out.println("Pet Database Program");
         while (true) {
@@ -35,6 +50,7 @@ public class App {
                     searchPetsByAge(db);
                     break;
                 case "7":
+                    saveFile(db);
                     System.out.println("Goodbye!");
                     System.exit(0);
                 default:
@@ -81,7 +97,7 @@ public class App {
                 continue;
             }
             int age = Integer.parseInt(inputTokens[1]);
-            db.addPet(new Pet(name, age));
+            db.addPet(new Pet(name, age), -1);
             count++;
         }
         System.out.println(count + " pets added.\n");
@@ -155,5 +171,40 @@ public class App {
         int age = pet.getAge();
         db.removeById(id);
         System.out.printf("%s %d is removed.\n", name, age);
+    }
+
+    public static boolean initializeDbFile() {
+        File file = new File(dbDataFileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                System.out.println("Data file created.");
+                return true;
+            } catch (Exception e) {
+                System.err.println("Error creating data file: " + e.getMessage());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void loadFile(PetDB db) {
+        File file = new File(dbDataFileName);
+        try {
+            db.loadFromFile(file);
+            System.out.println("Data loaded from file.");
+        } catch (InvalidFileFormatError e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static void saveFile(PetDB db) {
+        File file = new File(dbDataFileName);
+        try {
+            db.saveToFile(file);
+            System.out.println("Data saved to file.");
+        } catch (Exception e) {
+            System.err.println("Error saving data to file: " + e.getMessage());
+        }
     }
 }

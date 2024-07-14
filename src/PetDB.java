@@ -6,17 +6,31 @@
  *      Instructor: Prof. James Tucker
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import exceptions.InvalidFileFormatError;
 
 public class PetDB {
     private int _currentId = 0;
     private ArrayList<Pet> _pets = new ArrayList<Pet>();
     private String _tableEdge = "+-------------------------+\n";
 
-    public void addPet(Pet pet) {
-        pet.setId(_currentId);
-        _pets.add(pet);
-        _currentId++;
+    public void addPet(Pet pet, int id) {
+        if (id == -1) {
+            pet.setId(_currentId);
+            _pets.add(pet);
+            _currentId++;
+        } else {
+            pet.setId(id);
+            _pets.add(pet);
+            if (id >= _currentId) {
+                _currentId = id + 1;
+            }
+        }
     }
 
     public ArrayList<Pet> getPets() {
@@ -89,5 +103,41 @@ public class PetDB {
             pet.setName(name);
             pet.setAge(age);
         }
+    }
+
+    public void loadFromFile(File file) throws InvalidFileFormatError {
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] tokens = line.split(",");
+                if (tokens.length != 3) {
+                    throw new InvalidFileFormatError("Format should be 'ID,Name,Age': " + line);
+                }
+                String name = tokens[1];
+                try {
+                    Integer.parseInt(tokens[2]);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFileFormatError("Invalid age: " + line);
+                }
+                int age = Integer.parseInt(tokens[2]);
+                try {
+                    Integer.parseInt(tokens[0]);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFileFormatError("Invalid ID: " + line);
+                }
+                int id = Integer.parseInt(tokens[0]);
+                addPet(new Pet(name, age), id);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found.");
+        }
+    }
+
+    public void saveToFile(File file) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(file);
+        for (Pet pet : _pets) {
+            writer.println(pet.getId() + "," + pet.getName() + "," + pet.getAge());
+        }
+        writer.close();
     }
 }

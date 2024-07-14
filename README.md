@@ -1,18 +1,47 @@
-## Getting Started
+# Pet Database Program
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This program is a simple pet database program that allows the user to add, remove, and search for pets in a database. The program is written in Java and uses a simple text file to store the pet data. The program is designed to be easy to use and understand.
 
-## Folder Structure
+## Features
 
-The workspace contains two folders by default, where:
+- Add a pet to the database
+- Remove a pet from the database
+- Search for a pet in the database
+- List all pets in the database
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Usage
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+To use the program, simply run the `App` class. The program will prompt you to enter a command, which can be one of the following:
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+- `1` to view all pets
+- `2` to add a pet
+- `3` to update a pet
+- `4` to remove a pet
+- `5` to search for a pet by name
+- `6` to search for a pet by age
+- `7` to exit the program
 
-## Dependency Management
+## Example
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Here is an example of how to use the program:
+
+``` shell
+Welcome to the Pet Database Program!
+
+What would you like to do?
+1. View all pets
+2. Add more pets
+3. Update an existing pet
+4. Remove an existing pet
+5. Search pets by name
+6. Search pets by age
+7. Exit program
+1
++-------------------------+
+| ID  | NAME       | AGE  |
++-------------------------+
+|   0 | Robert     |    3 |
++-------------------------+
+1 rows in set.
+
+```
