@@ -12,14 +12,25 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import exceptions.ExceededMaxDbEntries;
 import exceptions.InvalidFileFormatError;
 
 public class PetDB {
     private int _currentId = 0;
     private ArrayList<Pet> _pets = new ArrayList<Pet>();
     private String _tableEdge = "+-------------------------+\n";
+    private int _maxEntries;
 
-    public void addPet(Pet pet, int id) {
+    public PetDB(int maxEntries) {
+        _maxEntries = maxEntries;
+    }
+
+    public void addPet(Pet pet, int id) throws ExceededMaxDbEntries {
+        if (_pets.size() >= _maxEntries) {
+            throw new ExceededMaxDbEntries(String.format(
+                "Exceeded max of %s entries", _maxEntries
+            ));
+        }
         if (id == -1) {
             pet.setId(_currentId);
             _pets.add(pet);
@@ -105,7 +116,7 @@ public class PetDB {
         }
     }
 
-    public void loadFromFile(File file) throws InvalidFileFormatError {
+    public void loadFromFile(File file) throws InvalidFileFormatError, ExceededMaxDbEntries {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
