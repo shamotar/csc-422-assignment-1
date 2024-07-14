@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import exceptions.AgeError;
 import exceptions.ExceededMaxDbEntries;
+import exceptions.InvalidInputError;
 
 public class AppTest {
     @Test
@@ -36,6 +37,21 @@ public class AppTest {
             db.addPet(pet, -1);
         } catch (Exception e) {
             assert(e.getClass() == AgeError.class);
+        }
+    }
+
+    @Test
+    public void testInvalidUserInput() throws InvalidInputError {
+        try {
+            new UserPetInput("Pet");
+        } catch (Exception e) {
+            assert(e.getClass() == InvalidInputError.class);
+        }
+
+        try {
+            new UserPetInput("Pet 3 4");
+        } catch (Exception e) {
+            assert(e.getClass() == InvalidInputError.class);
         }
     }
 }
