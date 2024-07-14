@@ -6,14 +6,16 @@
  *      Instructor: Prof. James Tucker
  */
 
+import exceptions.AgeError;
+
 public class Pet {
     private int _id;
     private String _name;
     private int _age;
 
-    public Pet(String name, int age) {
-        _name = name;
-        _age = age;
+    public Pet(String name, int age) throws AgeError {
+        setName(name);
+        setAge(age);
     }
 
     public void setId(int id) {
@@ -36,7 +38,10 @@ public class Pet {
         _name = name;
     }
 
-    public void setAge(int age) {
+    public void setAge(int age) throws AgeError {
+        if (age < 1 || age > 20) {
+            throw new AgeError("Age must be between 1 and 20");
+        }
         _age = age;
     }
 }

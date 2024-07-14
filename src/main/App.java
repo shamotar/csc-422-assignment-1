@@ -8,9 +8,6 @@
 
 import java.io.File;
 
-import exceptions.ExceededMaxDbEntries;
-import exceptions.InvalidFileFormatError;
-
 public class App {
     static String dbDataFileName = "src/data.txt";
     public static void main(String[] args) throws Exception {
@@ -102,8 +99,8 @@ public class App {
             int age = Integer.parseInt(inputTokens[1]);
             try {
                 db.addPet(new Pet(name, age), -1);
-            } catch (ExceededMaxDbEntries e) {
-                System.err.println(e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Error adding pet: " + e.getMessage());
                 break;
             }
             count++;
@@ -156,7 +153,12 @@ public class App {
             return;
         }
         int newAge = Integer.parseInt(inputTokens[1]);
-        db.updateById(id, newName, newAge);
+        try {
+            db.updateById(id, newName, newAge);
+        } catch (Exception e) {
+            System.err.println("Error updating pet: " + e.getMessage());
+            return;
+        }
         System.out.printf("%s %d changed to %s %d.\n", oldName, oldAge, newName, newAge);
     }
 
@@ -202,10 +204,7 @@ public class App {
             db.loadFromFile(file);
             System.out.println("Data loaded from file.");
             return true;
-        } catch (InvalidFileFormatError e) {
-            System.err.println(e.getMessage());
-            return false;
-        } catch (ExceededMaxDbEntries e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return false;
         }

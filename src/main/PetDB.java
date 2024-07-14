@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import exceptions.AgeError;
 import exceptions.ExceededMaxDbEntries;
 import exceptions.InvalidFileFormatError;
 
@@ -108,7 +109,7 @@ public class PetDB {
         }
     }
 
-    public void updateById(int id, String name, int age) {
+    public void updateById(int id, String name, int age) throws AgeError {
         Pet pet = getById(id);
         if (pet != null) {
             pet.setName(name);
@@ -116,7 +117,7 @@ public class PetDB {
         }
     }
 
-    public void loadFromFile(File file) throws InvalidFileFormatError, ExceededMaxDbEntries {
+    public void loadFromFile(File file) throws InvalidFileFormatError, ExceededMaxDbEntries, AgeError {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
