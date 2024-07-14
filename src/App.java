@@ -8,6 +8,7 @@
 
 import java.io.File;
 
+import exceptions.ExceededMaxDbEntries;
 import exceptions.InvalidFileFormatError;
 
 public class App {
@@ -16,7 +17,6 @@ public class App {
         // Initialize the data file
         boolean dbFileInitialized = initializeDbFile();
         if (!dbFileInitialized) {
-            System.err.println("Error initializing data file. Exiting program.");
             System.exit(1);
         }
 
@@ -24,7 +24,10 @@ public class App {
         PetDB db = new PetDB();
 
         // Load data from file
-        loadFile(db);
+        boolean successfulLoad = loadFile(db);
+        if (!successfulLoad) {
+            System.exit(1);
+        }
         
         System.out.println("Pet Database Program");
         while (true) {
@@ -97,7 +100,12 @@ public class App {
                 continue;
             }
             int age = Integer.parseInt(inputTokens[1]);
-            db.addPet(new Pet(name, age), -1);
+            try {
+                db.addPet(new Pet(name, age), -1);
+            } catch (ExceededMaxDbEntries e) {
+                System.err.println(e.getMessage());
+                break;
+            }
             count++;
         }
         System.out.println(count + " pets added.\n");
@@ -188,13 +196,18 @@ public class App {
         return true;
     }
 
-    public static void loadFile(PetDB db) {
+    public static boolean loadFile(PetDB db) {
         File file = new File(dbDataFileName);
         try {
             db.loadFromFile(file);
             System.out.println("Data loaded from file.");
+            return true;
         } catch (InvalidFileFormatError e) {
             System.err.println(e.getMessage());
+            return false;
+        } catch (ExceededMaxDbEntries e) {
+            System.err.println(e.getMessage());
+            return false;
         }
     }
 
