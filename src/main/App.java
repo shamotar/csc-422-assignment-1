@@ -129,9 +129,12 @@ public class App {
             return;
         }
         int id = Integer.parseInt(userInput);
-        Pet pet = db.getById(id);
-        if (pet == null) {
-            System.out.println("Pet not found.");
+
+        Pet pet;
+        try {
+            pet = db.getById(id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
             return;
         }
         String oldName = pet.getName();
@@ -171,14 +174,21 @@ public class App {
             return;
         }
         int id = Integer.parseInt(userInput);
-        Pet pet = db.getById(id);
-        if (pet == null) {
-            System.out.println("Pet not found.");
+        Pet pet;
+        try {
+            pet = db.getById(id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
             return;
         }
         String name = pet.getName();
         int age = pet.getAge();
-        db.removeById(id);
+        try {
+            db.removeById(id);
+        } catch (Exception e) {
+            System.err.println("Error removing pet: " + e.getMessage());
+            return;
+        }
         System.out.printf("%s %d is removed.\n", name, age);
     }
 
