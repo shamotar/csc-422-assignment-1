@@ -16,6 +16,7 @@ import exceptions.AgeError;
 import exceptions.ExceededMaxDbEntries;
 import exceptions.InvalidFileFormatError;
 import exceptions.InvalidInputError;
+import exceptions.RecordDoesNotExistError;
 
 public class PetDB {
     private int _currentId = 0;
@@ -94,23 +95,23 @@ public class PetDB {
         return result;
     }
 
-    public Pet getById(int id) {
+    public Pet getById(int id) throws RecordDoesNotExistError{
         for (Pet pet : _pets) {
             if (pet.getId() == id) {
                 return pet;
             }
         }
-        return null;
+        throw new RecordDoesNotExistError("Record with ID " + id + " does not exist");
     }
 
-    public void removeById(int id) {
+    public void removeById(int id) throws RecordDoesNotExistError {
         Pet pet = getById(id);
         if (pet != null) {
             _pets.remove(pet);
         }
     }
 
-    public void updateById(int id, String name, int age) throws AgeError {
+    public void updateById(int id, String name, int age) throws AgeError, RecordDoesNotExistError {
         Pet pet = getById(id);
         if (pet != null) {
             pet.setName(name);
