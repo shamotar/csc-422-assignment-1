@@ -15,6 +15,7 @@ import java.util.Scanner;
 import exceptions.AgeError;
 import exceptions.ExceededMaxDbEntries;
 import exceptions.InvalidFileFormatError;
+import exceptions.InvalidInputError;
 
 public class PetDB {
     private int _currentId = 0;
@@ -117,13 +118,20 @@ public class PetDB {
         }
     }
 
-    public void loadFromFile(File file) throws InvalidFileFormatError, ExceededMaxDbEntries, AgeError {
+    public void loadFromFile(File file) throws InvalidFileFormatError, ExceededMaxDbEntries, AgeError, InvalidInputError {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] tokens = line.split(",");
                 if (tokens.length != 3) {
                     throw new InvalidFileFormatError("Format should be 'ID,Name,Age': " + line);
+                }
+
+                // Validate pet data input
+                try {
+                    new UserPetInput(tokens[1] + " " + tokens[2]);
+                } catch (InvalidInputError e) {
+                    throw new InvalidFileFormatError("Invalid input: " + line);
                 }
                 String name = tokens[1];
                 try {

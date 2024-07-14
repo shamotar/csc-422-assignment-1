@@ -84,19 +84,18 @@ public class App {
             if (userInput.equals("done")) {
                 break;
             }
-            String[] inputTokens = userInput.split(" ");
-            if (inputTokens.length != 2) {
-                System.out.println("Invalid input. Please try again.");
-                continue;
-            }
-            String name = inputTokens[0];
+            // Validate the user input
+            UserPetInput userPetInput;
             try {
-                Integer.parseInt(inputTokens[1]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid age. Please try again.");
+                userPetInput = new UserPetInput(userInput);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
                 continue;
             }
-            int age = Integer.parseInt(inputTokens[1]);
+
+            String[] userTokens = userPetInput.input().split(" ");
+            String name = userTokens[0];
+            int age = Integer.parseInt(userTokens[1]);
             try {
                 db.addPet(new Pet(name, age), -1);
             } catch (Exception e) {
@@ -140,19 +139,19 @@ public class App {
 
         System.out.println("Enter the new name and age:");
         userInput = System.console().readLine();
-        String[] inputTokens = userInput.split(" ");
-        if (inputTokens.length != 2) {
-            System.out.println("Invalid input. Please try again.");
-            return;
-        }
-        String newName = inputTokens[0];
+
+        // Validate the user input
+        UserPetInput userPetInput;
         try {
-            Integer.parseInt(inputTokens[1]);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid age. Please try again.");
+            userPetInput = new UserPetInput(userInput);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
             return;
         }
-        int newAge = Integer.parseInt(inputTokens[1]);
+
+        String[] userTokens = userPetInput.input().split(" ");
+        String newName = userTokens[0];
+        int newAge = Integer.parseInt(userTokens[1]);
         try {
             db.updateById(id, newName, newAge);
         } catch (Exception e) {
