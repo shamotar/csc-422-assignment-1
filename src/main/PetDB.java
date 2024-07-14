@@ -19,7 +19,11 @@ public class PetDB {
     private int _currentId = 0;
     private ArrayList<Pet> _pets = new ArrayList<Pet>();
     private String _tableEdge = "+-------------------------+\n";
-    private int _maxEntries = 5;
+    private int _maxEntries;
+
+    public PetDB(int maxEntries) {
+        _maxEntries = maxEntries;
+    }
 
     public void addPet(Pet pet, int id) throws ExceededMaxDbEntries {
         if (_pets.size() >= _maxEntries) {

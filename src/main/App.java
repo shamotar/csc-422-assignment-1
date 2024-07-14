@@ -21,7 +21,7 @@ public class App {
         }
 
         // Initialize the PetDB object
-        PetDB db = new PetDB();
+        PetDB db = new PetDB(5);
 
         // Load data from file
         boolean successfulLoad = loadFile(db);

@@ -45,3 +45,9 @@ What would you like to do?
 1 rows in set.
 
 ```
+
+## Unit Tests
+
+Unit testing leverages JUnit 5. The tests are located in the `src/test/` directory. Visual Studio Code supports JUnit Jupiter and the JUnit Platform via the [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test) extension which is installed by default as part of the [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
+
+For more information consult the Testing section of the [Java in Visual Studio Code](https://code.visualstudio.com/docs/languages/java#_testing) documentation.
